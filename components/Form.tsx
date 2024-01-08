@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { CopyIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 interface Message {
   success: boolean;
@@ -13,6 +15,7 @@ interface Message {
 }
 
 const Form = () => {
+  const router = useRouter()
   const [url, setUrl] = useState<string>("");
   const [customUrl, setCustomUrl] = useState<string | null>(null);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
@@ -70,6 +73,15 @@ const Form = () => {
       });
     }
   };
+
+  const onCopy = async (text: string | number) => {
+    const shortedUrl = window.location.origin + "/" + text
+    await navigator.clipboard.writeText(shortedUrl)
+    toast("Short URL Copied!", {
+      description: "Short URL Copied To Your Clipboard!",
+    });
+  }
+
   return (
     <>
       <div className="flex py-4 justify-start items-center w-full h-16 mb-5 ml-5">
@@ -80,13 +92,19 @@ const Form = () => {
               <br />
               Original URL: <span className="text-zinc-600 text-base">{message.original}</span>
               <br />
-              Short URL: 
-              <a
-                className="text-green-500 text-xl cursor-pointer hover:text-green-300"
-                href={`/${message.short}`} target="_ blank"
-              >
-               {" "} /{message.short}
-              </a>
+              
+              <div className="flex items-center space-x-1">
+               <span> Short URL: </span>
+                {" "}
+                <a
+                  className="text-green-500 text-xl cursor-pointer hover:text-green-300"
+                  href={`/${message.short}`} target="_ blank"
+                >
+                {" "} /{message.short}
+                </a>
+
+                <CopyIcon className="cursor-pointer" width={20} height={20} onClick={() => onCopy(message.short)} />
+              </div>
             </>
           ) : (
             <>
