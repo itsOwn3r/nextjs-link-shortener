@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
       firstNumber = 4; // minimum charachter
     }
     let createUniqeId = Math.random().toString(36).replace(/[^a-z0-9]/gi, "").slice(1, firstNumber);
-    const query = `Select * from links WHERE shorturl="${escape(
+    const query = `Select * from links WHERE shorturl='${escape(
       createUniqeId
-    )}"`;
+    )}'`;
     const [rows] = await connection.execute<RowDataPacket[]>(query);
     if (rows.length === 0 || rows.length === undefined) {
       return createUniqeId;
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   if (data.custom === null || data.custom === "") {
     shortedUrl = await uniqeId();
   }else{
-    const query = `Select * from links WHERE shorturl="${escape(escapedCustom)}"`;
+    const query = `Select * from links WHERE shorturl='${escape(escapedCustom)}'`;
     const [rows] = await connection.execute<RowDataPacket[]>(query);
     if (rows.length === 0 || rows.length === undefined) {
       shortedUrl = escapedCustom
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   const values: never[] = [];
   const [rows] = await connection.execute<RowDataPacket[]>(query);
 
-  const queryForResult = `Select * from links WHERE shorturl="${shortedUrl}"`;
+  const queryForResult = `Select * from links WHERE shorturl='${shortedUrl}'`;
   const [rowsOfQueryForResult] = await connection.execute<RowDataPacket[]>(queryForResult, values);
   response.shorturl = rowsOfQueryForResult[0].shorturl
   response.success = true;

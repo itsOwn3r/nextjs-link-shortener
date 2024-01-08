@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     database: process.env.Database,
   });
 
-  const query = `Select * from links WHERE shorturl LIKE "${escape(escapedUrl)}"`;
+  const query = `Select * from links WHERE shorturl LIKE '${escape(escapedUrl)}'`;
   const [rows] = await connection.execute<RowDataPacket[]>(query);
   if (rows.length === 0 || rows.length === undefined) {
       return NextResponse.json({available: true});

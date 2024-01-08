@@ -9,8 +9,8 @@ const Page = async ({ params }: { params: { link: string } }) => {
     port: Number(process.env.DBPort),
     database: process.env.Database,
   });
-  const view = `UPDATE links SET view=view+1 WHERE shorturl LIKE "${escape(params.link)}"`;
-  const query = `Select * from links WHERE shorturl LIKE "${escape(params.link)}"`;
+  const view = `UPDATE links SET view=view+1 WHERE shorturl LIKE '${escape(params.link)}'`;
+  const query = `Select * from links WHERE shorturl LIKE '${escape(params.link)}'`;
   const [rows] = await connection.execute<RowDataPacket[]>(query);
   if (rows.length === 0 || rows.length === undefined) {
       return notFound();
